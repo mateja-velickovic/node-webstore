@@ -20,6 +20,14 @@ function requireHTTPS(req, res, next) {
 }
 app.use(requireHTTPS);
 
+// Définition du dossier contenant les fichiers statiques
+app.use(express.static("public"));
+
+// Redirection vers login.html lorsque la route racine est accédée
+app.get("/", (req, res) => {
+  res.redirect("/login.html");
+});
+
 // Définition des routes
 const mainRoute = require("./routes/Main");
 const userRoute = require("./routes/User");
@@ -28,7 +36,7 @@ app.use("/", mainRoute);
 app.use("/users", userRoute);
 app.use("/login", loginRoute);
 
-const https_port = 8080;
+const https_port = 443;
 https.createServer(keys, app).listen(https_port, () => {
   console.log(` > Serveur HTTPS (sécurisé)     :${https_port}`);
 });
